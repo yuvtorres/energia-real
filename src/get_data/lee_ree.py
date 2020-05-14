@@ -6,7 +6,7 @@ import datetime as dt
 def consulta_ree_hour(end_point, widget, fecha_ini, fecha_fin):
     # Función consultar horaria en REE
     # Apidatos.ree.es
-    
+
     url    = "https://apidatos.ree.es/es/datos/"
     widget = end_point + "/" + widget
     query  = "?start_date=" + str(fecha_ini.year)+"-"+str(fecha_ini.month).zfill(2)
@@ -23,8 +23,8 @@ def consulta_ree_hour(end_point, widget, fecha_ini, fecha_fin):
     r=requests.get(url+widget+query, headers=header)
     json_d=r.json()
     if 'errors' in json_d.keys():
+        print(json_d['errors'])
         return False
 
-    escribe_bd(widget,data)
-    return res
+    return json_d['included'] 
 
