@@ -2,6 +2,7 @@
 import requests
 import json
 import datetime as dt
+from src.config import REE_KEY
 
 def consulta_ree_hour(end_point, widget, fecha_ini, fecha_fin):
     # Función consultar horaria en REE
@@ -14,7 +15,7 @@ def consulta_ree_hour(end_point, widget, fecha_ini, fecha_fin):
     query += ":00&end_date="+str(fecha_fin.year)+"-"+str(fecha_fin.month).zfill(2)
     query += "-"+str(fecha_fin.day).zfill(2)+"T"+str(fecha_fin.hour-1).zfill(2)+":00&time_trunc=hour"
 
-    print("**** consultando -> ",end_point,' - ', widget ," ****")
+    print("**** consultando en REE -> ",end_point,' - ', widget ," ****")
 
     header={"Accept":"application/json",
             "Content-Type":"application/json",
@@ -28,3 +29,7 @@ def consulta_ree_hour(end_point, widget, fecha_ini, fecha_fin):
 
     return json_d['included'] 
 
+def consulta_ree_api():
+    
+    print(REE_KEY)
+    pass

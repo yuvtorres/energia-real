@@ -1,7 +1,19 @@
+from pathlib import Path
+from dotenv import load_dotenv
 import os
-import dotenv
-dotenv.load_dotenv()
 
-PORT = int(os.getenv("PORT"))
-DB_ALMA = os.getenv("DB_ALMA")
-SERV_ALMA=os.getenv("SERV_ALMA")
+last_dir=os.getcwd().split('/')[-1]
+
+if last_dir=='src':
+    env_path = Path('..') / '.env'
+elif last_dir=='get_data':
+    env_path = Path('../..') / '.env'
+else:
+    env_path = Path('.') / '.env'
+
+load_dotenv(dotenv_path=env_path)
+
+PORT_INFLUX = int(os.getenv("PORT_INFLUX"))
+HOST_INFLUX = os.getenv("HOST_INFLUX")
+AEMET_KEY = os.getenv("AEMET_KEY")
+REE_KEY=os.getenv("REE_KEY")
