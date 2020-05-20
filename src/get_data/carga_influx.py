@@ -9,8 +9,8 @@ from src.connect_db import client_influx
 def main():
     
     diff=dt.timedelta(days=15)
-    data_ini=dt.datetime(2019,2,1,0,0)
-    data_fin=dt.datetime(2020,1,1,0,0)
+    data_ini=dt.datetime(2020,1,1,0,0)
+    data_fin=dt.datetime(2020,6,1,0,0)
     while data_fin>data_ini:
         data_fin_sample=data_ini+diff
         if data_fin_sample>data_fin:

@@ -1,12 +1,15 @@
 # archivo para leer de Red Eléctrica
+from src.connect_db import client_mongo
+from src.connect_db import client_influx
 import requests
 import json
 import datetime as dt
 
-def leeree():
+def wigdet_caract():
     # función para el analisis de los endpoints de REE (2020 mayo)
     # apidatos.ree.es
 
+    db=client_mongo.ereal_collections
     current=dt.datetime.now()
     # todos los endpoints de demanda
     widget_demanda=["evolucion","variacion-componentes", "variacion-componentes-movil",
@@ -82,7 +85,7 @@ def leeree():
     end_str=['demanda','generacion','intercambios','transporte','mercados']
     k=0
     # **** consulta todos los endpoints 
-    time_trunc="month"
+    time_trunc="hour"
     for endp in endpoints:
         for wid in endp:
             widget=end_str[k]+"/"+wid
@@ -103,7 +106,7 @@ def leeree():
             if 'errors' not in json_d.keys():
                 res.append([end_str[k],wid,list(json_d.keys())])
         k+=1
-    with open('endp'+time_trunc+'.txt', 'w') as f:
-        json.dump(res, f, ensure_ascii=False)
+
+    db.ree_hour.insert_many(res)
     return res
 

@@ -12,20 +12,15 @@ def describ_db():
     conn.client_influx.switch_database('db_ereal')
     measu=conn.client_influx.get_list_measurements()
     print('** The measurements **')
-    [print(val['name']) for val in measu]
 
-    print('* First and last registers *')
     for val in measu:
-        print(f'First value in "{val["name"]}"')
         query_t=f'select first(value) from "{val["name"]}"'
         res=conn.client_influx.query(query_t)
-        point=list(res.get_points(val['name']))
-        print(point)
+        point_f=list(res.get_points(val['name']))
 
-        print(f'Last value in "{val["name"]}"')
         query_t=f'select last(value) from "{val["name"]}"'
         res=conn.client_influx.query(query_t)
-        point=list(res.get_points(val['name']))
-        print(point)
+        point_l=list(res.get_points(val['name']))
+        print(f''''The measure: "{val["name"]}" {[ele["time"] for ele in point_f]}- {[ele["time"] for ele in point_l]}''')
 
 
