@@ -8,6 +8,7 @@ from src.config import AEMET_KEY
 
 def c_aemet_por_estaciones():
     # funcion para cargar por estaciones los datos en influxdb
+    # la consulta devuelve datos para las últimas 24 horas
     client_influx.switch_database('db_ereal')
     url="https://opendata.aemet.es/opendata/api/observacion/convencional/datos/estacion/"
     querystring = { "api_key":AEMET_KEY }

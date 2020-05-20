@@ -29,7 +29,3 @@ def consulta_ree_hour(end_point, widget, fecha_ini, fecha_fin):
 
     return json_d['included'] 
 
-def consulta_ree_api():
-    
-    print(REE_KEY)
-    pass

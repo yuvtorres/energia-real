@@ -6,8 +6,8 @@ import datetime as dt
 
 def c_esios():
     diff_time=dt.timedelta(days=15)
-    data_ini=dt.datetime(2020,1,1,0,0)
-    data_fin=dt.datetime(2020,5,15,0,0)
+    data_ini=dt.datetime(2020,4,1,0,0)
+    data_fin=dt.datetime(2020,6,1,0,0)
     url='https://api.esios.ree.es/indicators/'
     indicator=['10206']
     header={'Accept': 'application/json;application/vnd.esios-api-v1+json',

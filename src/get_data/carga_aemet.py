@@ -6,8 +6,9 @@ from src.config import AEMET_KEY
 import datetime as dt
 
 def c_aemet():
-    # Función que llena la base ereal, se debe configurar los parametros de
-    # fechas
+    # Función que llena la base ereal (Influx), se debe configurar los parametros de
+    # fechas consulta para todas las estaciones al tiempo al consulta trae
+    # datos diarios.
 
     client_influx.switch_database('db_ereal')
     diff_time=dt.timedelta(days=15)
@@ -74,6 +75,10 @@ def c_aemet():
 
 def c_aemet_actual(actualiza_meta=False):
     # Funcion de actualización de las lecturas de clima desde AEMET en Influx
+    # últimas 24 horas. 
+    # utilizando la consulta "convecional todas" el parametro que recibe es
+    # verdadero cuando se quiere actualizar el valor de los metadatos.
+
     client_influx.switch_database('db_ereal')
     url="https://opendata.aemet.es/opendata/api/observacion/convencional/todas"
     querystring = { "api_key":AEMET_KEY }

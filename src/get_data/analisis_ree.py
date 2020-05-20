@@ -1,11 +1,13 @@
-# archivo para leer de Red Eléctrica
+# Archivo para leer de Red Eléctrica de la API que no necesiota clave. 
+# La función widget_caract sirve para consultar todos lo endpoints y 
+# caracaterizarlos según el parámetro de tiempo (hora, día o mes) de la consulta.
 from src.connect_db import client_mongo
 from src.connect_db import client_influx
 import requests
 import json
 import datetime as dt
 
-def wigdet_caract():
+def widget_caract():
     # función para el analisis de los endpoints de REE (2020 mayo)
     # apidatos.ree.es
 
@@ -85,11 +87,11 @@ def wigdet_caract():
     end_str=['demanda','generacion','intercambios','transporte','mercados']
     k=0
     # **** consulta todos los endpoints 
-    time_trunc="hour"
+    time_trunc="day"  # <---- hour, day, mounth
     for endp in endpoints:
         for wid in endp:
             widget=end_str[k]+"/"+wid
-            query="?start_date="+str(current.year-1)+"-"+str(current.month).zfill(2)
+            query="?start_date="+str(current.year)+"-"+str(current.month-1).zfill(2)
             query+="-"+str(current.day-1).zfill(2)+"T"+str(current.hour-1).zfill(2)
             query+=":00&end_date="+str(current.year)+"-"+str(current.month).zfill(2)
             query+="-"+str(current.day).zfill(2)+"T"+str(current.hour-1).zfill(2)+":00&time_trunc="+time_trunc
@@ -102,11 +104,13 @@ def wigdet_caract():
 
             r=requests.get(url+widget+query, headers=header)
             json_d=r.json()
-            print(json_d.keys())
             if 'errors' not in json_d.keys():
-                res.append([end_str[k],wid,list(json_d.keys())])
+                res.append( {"grupo":end_str[k] ,"widget": wid , "dato":
+                    json_d['data']['type'] } )
         k+=1
 
-    db.ree_hour.insert_many(res)
+    if res!=[]:
+        print(len(res))
+        db.ree_day.insert_many(res) # <- hour day  month
     return res
 

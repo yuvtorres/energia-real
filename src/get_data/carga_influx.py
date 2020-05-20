@@ -1,5 +1,5 @@
 from src.get_data.lee_ree import consulta_ree_hour
-from src.get_data.analisis_ree import leeree
+from src.get_data.analisis_ree import widget_caract 
 from dotenv import load_dotenv
 import datetime as dt
 import sys
@@ -7,7 +7,8 @@ sys.path.insert(1, '../')
 from src.connect_db import client_influx
 
 def main():
-    
+    # funcion para leer de REE de la API que no necesita KEY esta función llama
+    # a la lectura por horas de lee_ree y escribe en la base de datos influx 
     diff=dt.timedelta(days=15)
     data_ini=dt.datetime(2020,1,1,0,0)
     data_fin=dt.datetime(2020,6,1,0,0)

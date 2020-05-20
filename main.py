@@ -6,6 +6,8 @@ import sys
 import src.config
 
 # Modules ad-hoc from e-real
+from src.get_data import tool_esios as t_esios
+from src.get_data import analisis_ree as a_ree
 from src.get_data import carga_influx as c_ix
 from src.get_data import carga_esios as c_esios
 from src.get_data import carga_aemet as c_aemet
@@ -23,6 +25,12 @@ def main():
     parser.add_argument('--get_data_ree', action='store_true',
                 help='''Read data from public api REE
                 (https://apidatos.ree.es), used for initializated the db''')
+
+    # optional for read REE public API and write in Inlfux db some parameters
+    parser.add_argument('--get_data_ree2', action='store_true',
+                help='''Read data from public api REE
+                (https://apidatos.ree.es), some parameters used for initializated the db''')
+
 
     # optional for reading REE API Esios
     parser.add_argument('--get_data_esios', action='store_true',
@@ -60,6 +68,10 @@ def main():
     # initialized the db 
     if args.get_data_ree:
         c_ix.main()
+
+    if args.get_data_ree2:
+        t_esios.carga_indicadores()
+#        a_ree.widget_caract()
 
     if args.get_data_esios:
         c_esios.c_esios()
