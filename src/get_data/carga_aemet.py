@@ -96,14 +96,20 @@ def c_aemet_actual(actualiza_meta=False):
         c_aemet_actual_mongo_metadatos(url_meta)
     
     k=0
-    variables=['fint','idema','vv','vmax','inso']
+    variables=['fint','idema','vv','vmax','inso','vvu','vmaxu']
     print('actualizando ',len(response.json()),' estaciones')
     for lectura in response.json():
-        if sum([var in lectura.keys() for var in variables ])==5:
+        if sum([var in lectura.keys() for var in variables ])>=5:
             data=lectura['fint']
             indicativo=lectura['idema']
-            velmedia=lectura['vv']
-            racha=lectura['vmax']
+            try:
+                velmedia=lectura['vv']
+            except:
+                velmedia=lectura['vvu']
+            try:
+                racha=lectura['vmax']
+            except:
+                racha=lectura['vmaxu']
             sol=lectura['inso']
             json_body={
                     "measurement":"Clima",
