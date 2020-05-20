@@ -21,7 +21,6 @@ def c_aemet_estaciones():
     result=aemet_estaciones.insert_many(response.json())
 
 
-
 def c_aemet_actualiza_metadatos_estaciones(url_metadatos):
     # actualiza la collection metadatos en mongodb
     querystring = { "api_key":AEMET_KEY }
