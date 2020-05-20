@@ -52,7 +52,7 @@ def main():
     # optional for reading AEMET API all stations at a time
     parser.add_argument('--get_actual_aemet', action='store_true',
                 help='''Read the last 24 hours data from API AEMET, which has the information
-                of the climate variables in Spain. These are relevant varibales
+                of the climate variables in Spain. These are relevant variables
                 for the renewable electricity generation in the short term''')
 
     # optional for reading AEMET API by station
@@ -74,7 +74,10 @@ def main():
 #        a_ree.widget_caract()
 
     if args.get_data_esios:
-        c_esios.c_esios()
+#        c_esios.c_esios()
+        t_esios.lee_esios_carga_influx(551) # <- lee eolica generada en timpo real
+        t_esios.lee_esios_carga_influx(552) # <- lee solar generada en timpo real
+
 
     if args.get_data_aemet:
         c_aemet.c_aemet()

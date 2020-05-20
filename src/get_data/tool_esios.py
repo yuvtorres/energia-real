@@ -2,6 +2,7 @@
 # escribe en mongo DB los mismo para su gestión.
 import src.connect_db
 import requests
+from src.connect_db import client_influx
 from src.connect_db import client_mongo
 from src.config import REE_KEY
 import datetime as dt
@@ -20,22 +21,24 @@ def carga_indicadores():
     print('*** Fueron cargados ',len(datos['indicators']) , ' indicadores en mongo DB ')
     db.indicadores_ree.insert_many(datos['indicators'])
     
-def lee_esios_carga_influx(id=551):
+def lee_esios_carga_influx(id):
     # funcion para la lectura en tiempo real de la generación eólica (id=551) últimas
     # tres horas D-1 hasta la hora actual
+    print(id)
     url='https://api.esios.ree.es/indicators/'
-    indicator=[id]
-    data_ini=
-    data_fin=
+    indicator=[str(id)]
+    data_ini=dt.datetime.now()-dt.timedelta(days=-2)
+    data_fin=dt.datetime.now()
     header={'Accept': 'application/json;application/vnd.esios-api-v1+json',
             'Content-Type': 'application/json',
             'Host': 'api.esios.ree.es',
             'Authorization': f'Token token={REE_KEY}'}
     
-    parm={'start_date':data_ini,
-            'end_date':data_fin}
+    parm={'start_date':data_ini.strftime("%Y-%m-%dT%H:%M%SZ"),
+            'end_date':data_fin.strftime("%Y-%m-%dT%H:%M%SZ")}
 
     res=requests.get(url+indicator[0],params=parm,headers=header)
+    print(res,parm)
     name=res.json()['indicator']['name']
     values=res.json()['indicator']['values']
     print('writing in influx...',data_ini )
@@ -53,7 +56,7 @@ def escribe_influx(name, values):
         client_influx.create_database('db_ereal')
 
     client_influx.switch_database('db_ereal')
-
+    print('writing ',len(values),' measures in ',name)
     for value in values:
         json_body=[{
             "measurement":name,
