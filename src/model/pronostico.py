@@ -39,6 +39,11 @@ def make_gen_eo():
     rename={old:old.split('-')[-1] for old in clima_velmedia}
     clima_velmedia=clima_velmedia.rename(columns=rename)
     clima_velmedia=clima_velmedia.dropna(axis='columns')
+    clima_velmedia=filtro_geo_estacion(clima_velmedia)
+
+    # chequeo georeferencia
+    db= client_mongo.ereal_collections
+    estaciones=list(db.estaciones.find({},{'_id':0,'indicativo':1}))
 
     print('+ Se han importado ',clima_velmedia.shape[0], ' medidas de viento')
     print('+ Que corresponde con ',clima_velmedia.shape[1], ' columnas')
@@ -48,14 +53,14 @@ def make_gen_eo():
     data=data.drop(['geo_id'],axis=1)
     data=data.dropna()
     print()
-    print('Los datos de modelo son de dimensión:', data.shape)
+    print('Los datos para el modelo son de dimensión:', data.shape)
     
     print('Tiene ', sum( data.isna().sum() ) , ' nulos')
 
     y=data['value']
     X=data[[*[col for col in data.columns if col!='value']]]
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
-    regr = MLPRegressor(hidden_layer_sizes=100,activation='logistic',
+    regr = MLPRegressor(hidden_layer_sizes=120,activation='logistic',
             random_state=1, max_iter=500,solver='lbfgs').fit(X_train, y_train)
 
     print('El r2 del modelo es', regr.score(X_test, y_test) )
@@ -68,21 +73,33 @@ def make_gen_eo():
     for cluster in clusters:
         pred=pd.read_csv('data/pred_wind_'+str(cluster)+'.csv')
         pred=pred.rename({'Unnamed: 0': 'time'}, axis='columns')
+        pred.time=pd.to_datetime(pred.time)
         pred=pred.set_index('time')
         if len(X_pred)==0:
             X_pred=pred
         else:
-            print(X_pred)
-            print(pred)
             X_pred=X_pred.join(pred,how='inner')
 
     y_predict=regr.predict(X_pred)
-
+    y_predict=pd.DataFrame(y_predict).set_index(X_pred.index)
+    
+    print(y.index)
+    print(y_predict.index)
     plt.plot(y)
     plt.plot(y_predict)
     plt.savefig('src/templates/pred_eo.png')
 
 
 
+
+def filtro_geo_estacion(clima_velmedia):
+    # chequeo georeferencia
+    db= client_mongo.ereal_collections
+    estaciones=list(db.estaciones.find({},{'_id':0,'indicativo':1}))
+    for col in clima_velmedia.columns:
+        if len(list(db.estaciones.find({'indicativo':col},{}) ) )==0:
+            clima_velmedia=clima_velmedia.drop([col], axis=1)
+
+    return clima_velmedia
 
 

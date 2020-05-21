@@ -19,4 +19,4 @@ HOST_INFLUX = os.getenv("HOST_INFLUX")
 HOST_MONGO = os.getenv("HOST_MONGO")
 AEMET_KEY = os.getenv("AEMET_KEY")
 REE_KEY = os.getenv("REE_KEY")
-
+PORT=os.getenv("PORT")

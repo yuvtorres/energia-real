@@ -1,5 +1,15 @@
+flask
+pymongo
+python-dotenv
 request
+flask_cors
 json
 infludb
 os
 dotenv
+pandas
+numpy
+argparse
+sys
+render_template
+
