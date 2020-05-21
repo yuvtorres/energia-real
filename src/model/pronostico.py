@@ -1,0 +1,88 @@
+# Object connections and constants
+from sklearn.neural_network import MLPRegressor
+from sklearn.model_selection import train_test_split
+from src.connect_db import client_influx
+from src.connect_db import client_df
+from src.connect_db import client_mongo
+
+# libraries from python 
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+import statsmodels.api as sm
+
+def make_gen_eo():
+    # función que hace el pronóstico de generación eólico usando redes
+    # neuronales. También crea la gráfica de estaciónes
+
+    # carga datos de generación históticos recientes
+    df=client_df
+    q_str=''' SELECT * FROM "Generación T.Real eólica"  WHERE time > now()-3d'''
+    res=df.query(q_str)
+
+    points=res.items()
+    points=list(points)
+    g_eo=points[0][1]
+    print('+ Se han importado ',len(g_eo), ' datos de generación eólica')
+    
+    # carga datos de viento medio
+    q_str=''' SELECT * FROM "Clima"  WHERE time > now()-3d'''
+    res=df.query(q_str)
+
+    points=res.items()
+    points=list(points)
+    clima=points[0][1]
+    col_velmedia=[ele for ele in clima.columns if ele.split('-')[0]=='velmedia']
+    clima_velmedia=clima[[*col_velmedia]]
+    clima_velmedia=clima_velmedia.drop(['velmedia'],axis=1)
+    rename={old:old.split('-')[-1] for old in clima_velmedia}
+    clima_velmedia=clima_velmedia.rename(columns=rename)
+    clima_velmedia=clima_velmedia.dropna(axis='columns')
+
+    print('+ Se han importado ',clima_velmedia.shape[0], ' medidas de viento')
+    print('+ Que corresponde con ',clima_velmedia.shape[1], ' columnas')
+
+    # Modelo de predicción
+    data=clima_velmedia.join(g_eo)
+    data=data.drop(['geo_id'],axis=1)
+    data=data.dropna()
+    print()
+    print('Los datos de modelo son de dimensión:', data.shape)
+    
+    print('Tiene ', sum( data.isna().sum() ) , ' nulos')
+
+    y=data['value']
+    X=data[[*[col for col in data.columns if col!='value']]]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
+    regr = MLPRegressor(hidden_layer_sizes=100,activation='logistic',
+            random_state=1, max_iter=500,solver='lbfgs').fit(X_train, y_train)
+
+    print('El r2 del modelo es', regr.score(X_test, y_test) )
+    
+    #carga las estaciones con cluster
+    df_estaciones=pd.read_csv('data/estaciones.csv')
+    clusters=list(df_estaciones.cluster.value_counts().index)
+    X_pred=pd.DataFrame()
+    
+    for cluster in clusters:
+        pred=pd.read_csv('data/pred_wind_'+str(cluster)+'.csv')
+        pred=pred.rename({'Unnamed: 0': 'time'}, axis='columns')
+        pred=pred.set_index('time')
+        if len(X_pred)==0:
+            X_pred=pred
+        else:
+            print(X_pred)
+            print(pred)
+            X_pred=X_pred.join(pred,how='inner')
+
+    y_predict=regr.predict(X_pred)
+
+    plt.plot(y)
+    plt.plot(y_predict)
+    plt.savefig('src/templates/pred_eo.png')
+
+
+
+
+

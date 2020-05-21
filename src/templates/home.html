@@ -1,0 +1,162 @@
+ <!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8" />
+<title>API E Real</title>
+
+<script>
+
+<!-- ***  get bd script section ***-->
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+		var myArr = JSON.parse(this.responseText);
+		disp_users(myArr);
+		}
+	};
+xhttp.open("GET", "bd_description/", true);
+xhttp.send();
+
+function disp_db_desc(arr) {
+    var out = "";
+    var i;
+	console.log(arr.users[0]['name']);
+    for(i = 0; i < arr.users.length; i++) {
+        out += '<option value="' + arr.users[i]['name'] + '">' +
+        arr.users[i]['name'] + '</option>';
+    }
+    out='<select id="id_user">'+out+'</select>'
+    document.getElementById("users").innerHTML = out;
+}
+
+<!-- ***  get chat script section ***-->
+
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+	var myArr = JSON.parse(this.responseText);
+        disp_chats(myArr);
+    	}
+};
+xhttp.open("GET", "chats/", true);
+xhttp.send();
+
+function disp_chats(arr) {
+    var out = "";
+    var i;
+    for(i = 0; i < arr.chats.length; i++) {
+        out += '<option value="' + arr.chats[i]['chat'] + '">' +
+        arr.chats[i]['chat'] + '</option>';
+    }
+	out='<select id="id_chat">'+out+'</select>'
+    document.getElementById("chats").innerHTML = out;
+}
+
+
+<!-- ***  get message script section and load buttons   *** -->
+
+function carga_mensajes_chat(){
+    conn="sentiment/"+document.getElementById("id_chat").value+'/';
+    actualiza_sentiments_chat(conn);
+    actualiza_imagen();
+    conn= "message/"+document.getElementById("id_chat").value+'/';
+    muestra_mensajes("chat",conn,"user");
+}
+function carga_mensajes_user(){
+    conn="message_u/"+document.getElementById("id_user").value+'/'
+    muestra_mensajes("user",conn,"chat")
+}
+
+function muestra_mensajes(tipo,conn,consulta){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var myArr = JSON.parse(this.responseText);
+            disp_message(myArr,tipo,consulta);
+        }
+    };
+    xhttp.open("GET",conn , true);
+    xhttp.send();
+}
+
+function disp_message(arr,tipo,consulta) {
+    var out = "<tr><th>"+consulta+"</th><th>message</th>";
+    var i;
+    for(i = 0; i < arr.messages.length; i++) {
+        out += '<tr> <td>' + arr.messages[i][consulta] + '</td><td>' +
+            arr.messages[i]['content'] + '</td><tr>';
+    }
+	out='<table>'+out+'</table>'
+    document.getElementById("messages").innerHTML = out;
+}
+
+
+</script>
+</head>
+
+<body>
+
+<h1> API Energía Real : Pronóstico de energía Renovable corto plazo - España </h1>
+
+<h2>Pronóstico generación eólica</h2>
+<button type="button" onclick="carga_gen_eo()">load</button>
+<img src="g_eo_graph" id="g_eo_sent" alt="Pronóstico generación eólica" > 
+<div id="g_eo_div"></div>
+
+<h3>Pronóstico generación fotovoltaica</h3>
+<button type="button" onclick="carga_gen_fv()">load</button>
+<img src="g_fv_graph" id="g_fv_sent" alt="Pronóstico generación fotovoltaica" > 
+<div id="g_fv_div"></div>
+
+<h3>Datos</h3>
+<button type="button" onclick="carga_desc_datos()">load</button>
+<img src="datos_graph" id="tubo_datos" alt="Proceso de Pronóstico de generación" > 
+<div id="datos"></div>
+
+
+<h3>Proceso de Pronóstico</h3>
+<div id="Proceso"></div>
+
+</body>
+
+<script>
+function carga_sentimientos() {
+	    var image = document.getElementById("sentiment_sent");
+	    image.src = image.src.split("?")[0] + "?" + new Date().getTime();
+    }
+
+function esconde_mensajes() {
+        var x = document.getElementById("messages");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+
+function actualiza_imagen() {
+	    var image = document.getElementById("chat_sent");
+	    image.src = image.src.split("?")[0] + "?" + new Date().getTime();
+    }
+
+function actualiza_sentiments_chat(conn){
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var myArr = JSON.parse(this.responseText);
+			disp_sentiment(myArr);
+			}
+		};
+	xhttp.open("GET", conn, true);
+	xhttp.send();
+}
+
+function disp_sentiment(myArr){
+	var out = " The mean values in the chat "+myArr['chat']+" are: <br>";
+	out+= " Neg: "+myArr['Neg']+"   --   Pos: " +myArr['Pos'] +"<br>";
+	out+= " Neu: "+ myArr['neu']+"   --   Compound: "+ myArr['compound'];
+    	document.getElementById("chat_titulo").innerHTML = out;
+}
+</script>
+</html> 

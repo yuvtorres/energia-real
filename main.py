@@ -3,9 +3,11 @@
 # Modules efrom python
 import argparse
 import sys
-import src.config
 
 # Modules ad-hoc from e-real
+import src.config
+from src.model import pronostico
+from src.model  import cluster
 from src.get_data import tool_esios as t_esios
 from src.get_data import analisis_ree as a_ree
 from src.get_data import carga_influx as c_ix
@@ -63,6 +65,19 @@ def main():
     parser.add_argument('--describ_db', action='store_true',
                 help='''Describe the content of the influx db''')
 
+    # argument to create clusers 
+    parser.add_argument('--create_cluster', action='store_true',
+                help='''Create the cluster of weather stations by LatLong''')
+
+    # argument to create clusers 
+    parser.add_argument('--make_winds', action='store_true',
+                help='''Create the wind forecast by cluster using VAR models''')
+
+    # argument to create clusers 
+    parser.add_argument('--make_gen_eo', action='store_true',
+                help='''Create the eolic generation forecast using forward NN
+                model''')
+
     args = parser.parse_args()
 
     # initialized the db 
@@ -95,6 +110,15 @@ def main():
 
     if args.describ_db:
         describ_db.describ_db()
+
+    if args.create_cluster:
+        cluster.crea_cluster()
+
+    if args.make_winds:
+        cluster.make_winds()
+
+    if args.make_gen_eo:
+        pronostico.make_gen_eo()
 
 if __name__=="__main__":
     main()
