@@ -19,38 +19,42 @@ xhttp.open("GET", "bd_description/", true);
 xhttp.send();
 
 function disp_db_desc(arr) {
-    var out = "";
+    var out = "<tr><th>medida</th><th>data ini</th><th>data fin</th>";
     var i;
-	console.log(arr.users[0]['name']);
-    for(i = 0; i < arr.users.length; i++) {
-        out += '<option value="' + arr.users[i]['name'] + '">' +
-        arr.users[i]['name'] + '</option>';
+    for(i = 0; i < arr.description.length; i++) {
+        out += '<tr> <td>' + arr.description[i]['name'] + '</td><td>' +
+            arr.description[i]['f_data'] +
+            '</td><td>'+arr.description[i]['l_data']+'</td></tr>';
     }
-    out='<select id="id_user">'+out+'</select>'
-    document.getElementById("users").innerHTML = out;
+	out='<table>'+out+'</table>'
+    document.getElementById("description_db").innerHTML = out;
 }
 
-<!-- ***  get chat script section ***-->
+
+
+<!-- ***  get Forecast Eolic  ***-->
 
 var xhttp = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
-	if (this.readyState == 4 && this.status == 200) {
+	if (this.readyState
+        == 4 && this.status == 200) {
 	var myArr = JSON.parse(this.responseText);
-        disp_chats(myArr);
+        disp_forecast_eo(myArr);
     	}
 };
-xhttp.open("GET", "chats/", true);
+xhttp.open("GET", "forecast_eo/", true);
 xhttp.send();
 
-function disp_chats(arr) {
-    var out = "";
+function disp_forecast_eo(arr) {
+    var 
+    out = "";
     var i;
     for(i = 0; i < arr.chats.length; i++) {
         out += '<option value="' + arr.chats[i]['chat'] + '">' +
         arr.chats[i]['chat'] + '</option>';
     }
 	out='<select id="id_chat">'+out+'</select>'
-    document.getElementById("chats").innerHTML = out;
+    document.getElementById("g_eo_div").innerHTML = out;
 }
 
 
@@ -110,9 +114,9 @@ function disp_message(arr,tipo,consulta) {
 <div id="g_fv_div"></div>
 
 <h3>Datos</h3>
+<div id="description_db"></div>
 <button type="button" onclick="carga_desc_datos()">load</button>
 <img src="datos_graph" id="tubo_datos" alt="Proceso de Pronóstico de generación" > 
-<div id="datos"></div>
 
 
 <h3>Proceso de Pronóstico</h3>

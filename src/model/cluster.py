@@ -64,7 +64,7 @@ def make_winds():
     df_clima_est=df_estaciones.loc[df_estaciones['indicativo'].isin(list(clima_velmedia.columns))]
     plt.scatter(df_clima_est['lon'],df_clima_est['lat'],c=df_clima_est['cluster'])
     plt.savefig('src/templates/mapa_estaciones_lec.png')
-    
+    r2_vec=[]    
     df_clima_est=df_clima_est.set_index('indicativo')
     for cluster in clusters:
         #filtra por cluster
@@ -72,6 +72,7 @@ def make_winds():
         if len(cv_x.columns)>1:
             mod = sm.tsa.VARMAX(cv_x, order=(5,0), trend='n')
             res = mod.fit(maxiter=1000, disp=False)
+            r2_vec.append(res.mse)
             cv_x_pred = res.forecast(24)
             cv_x_pred.to_csv('data/pred_wind_'+str(cluster)+'.csv')
         else:
@@ -83,7 +84,9 @@ def make_winds():
                 sarimax_res = sarimax_mod.fit()
 
             cv_x_pred=sarimax_res.forecast(24)
+            r2_vec.append(sarimax_res.mse)
             cv_x_pred=cv_x_pred.rename(cv_x.columns[0])
             cv_x_pred.to_csv('data/pred_wind_'+str(cluster)+'.csv')
  
 
+    return r2_vec

@@ -16,5 +16,6 @@ from src.get_data import describ_db
 
 # import routes of app
 import src.routes.home
-
+import src.routes.descrip
+import src.routes.forecast
 app.run("0.0.0.0", PORT, debug=True)
