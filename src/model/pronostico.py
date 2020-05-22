@@ -8,9 +8,11 @@ from src.connect_db import client_mongo
 # libraries from python 
 import pandas as pd
 import numpy as np
+import json
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import statsmodels.api as sm
+import datetime as dt
 
 def make_gen_eo():
     # función que hace el pronóstico de generación eólico usando redes
@@ -25,7 +27,7 @@ def make_gen_eo():
     points=list(points)
     g_eo=points[0][1]
     print('+ Se han importado ',len(g_eo), ' datos de generación eólica')
-    
+
     # carga datos de viento medio
     q_str=''' SELECT * FROM "Clima"  WHERE time > now()-3d'''
     res=df.query(q_str)
@@ -63,8 +65,12 @@ def make_gen_eo():
     regr = MLPRegressor(hidden_layer_sizes=120,activation='logistic',
             random_state=1, max_iter=500,solver='lbfgs').fit(X_train, y_train)
 
-    print('El r2 del modelo es', regr.score(X_test, y_test) )
-    
+    r2=regr.score(X_test, y_test)
+    print('El r2 del modelo es',r2)
+
+    db=client_mongo.ereal_collections
+    db.scores.insert_one({'name':'eolico','data':dt.datetime.now(),'r2':r2})
+
     #carga las estaciones con cluster
     df_estaciones=pd.read_csv('data/estaciones.csv')
     clusters=list(df_estaciones.cluster.value_counts().index)

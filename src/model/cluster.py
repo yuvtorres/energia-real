@@ -6,6 +6,8 @@ from src.connect_db import client_df
 from src.connect_db import client_mongo
 
 # libraries from python 
+import contextily as ctx
+import geopandas
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,9 +28,18 @@ def crea_cluster():
     kmeans = KMeans(n_clusters=20, random_state=0).fit(estaciones_k)
 
     cluster=kmeans.predict(estaciones_k)
-    plt.scatter(estaciones_k.T[1],estaciones_k.T[0],c=list(cluster))
+
+    df=pd.DataFrame({'cluster':cluster,
+        'Lat':estaciones_k.T[0]/10000.0,
+        'Lon':estaciones_k.T[1]/10000.0})
+
+    gdf = geopandas.GeoDataFrame(df, geometry=geopandas.points_from_xy(df.Lon, df.Lat),
+            crs="ETRS89")
+    df = gdf.to_crs(epsg=3857)
+    ax = df.plot(figsize=(10, 10), alpha=0.2, edgecolor='k')
+    ctx.add_basemap(ax)
     plt.savefig('src/templates/mapa_estaciones.png')
-    
+
     lat=[int(ele['latitud'][:-1]) for ele in estaciones]
     lon=[(-1 if ele['longitud'][-1]=='W' else 1)*int(ele['longitud'][:-1]) for ele in estaciones]
     indicativo=[ele['indicativo'] for ele in estaciones]
@@ -37,10 +48,12 @@ def crea_cluster():
         'lon':lon,'indicativo':indicativo,'cluster':list(cluster)})
     df_estaciones.to_csv('data/estaciones.csv')
 
+
+#### ------------ 
 def make_winds():
     # función que hace la predicción del tiempo del día siguiente con base en
     # las últimas medidas de viento y agrupando por clusters
-    
+
     #carga las estaciones con cluster
     df_estaciones=pd.read_csv('data/estaciones.csv')
     clusters=list(df_estaciones.cluster.value_counts().index)
@@ -64,7 +77,8 @@ def make_winds():
     df_clima_est=df_estaciones.loc[df_estaciones['indicativo'].isin(list(clima_velmedia.columns))]
     plt.scatter(df_clima_est['lon'],df_clima_est['lat'],c=df_clima_est['cluster'])
     plt.savefig('src/templates/mapa_estaciones_lec.png')
-    r2_vec=[]    
+    return True
+    r2_vec=[]
     df_clima_est=df_clima_est.set_index('indicativo')
     for cluster in clusters:
         #filtra por cluster
@@ -77,7 +91,7 @@ def make_winds():
             cv_x_pred.to_csv('data/pred_wind_'+str(cluster)+'.csv')
         else:
             sarimax_mod = SARIMAX(cv_x, order=((1,12,24),0, 0), trend='n')
-            try: 
+            try:
                 sarimax_res = sarimax_mod.fit()
             except:
                 sarimax_mod = SARIMAX(cv_x, order=((1,24),0, 0), trend='n')
@@ -87,6 +101,6 @@ def make_winds():
             r2_vec.append(sarimax_res.mse)
             cv_x_pred=cv_x_pred.rename(cv_x.columns[0])
             cv_x_pred.to_csv('data/pred_wind_'+str(cluster)+'.csv')
- 
+
 
     return r2_vec

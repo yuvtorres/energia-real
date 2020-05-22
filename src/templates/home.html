@@ -1,10 +1,18 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 
 <meta charset="utf-8" />
 <title>API E Real</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
 
+ <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
 <script>
 
 <!-- ***  get bd script section ***-->
@@ -26,10 +34,9 @@ function disp_db_desc(arr) {
             arr.description[i]['f_data'] +
             '</td><td>'+arr.description[i]['l_data']+'</td></tr>';
     }
-	out='<table>'+out+'</table>'
+	out='<table class="w3-table w3-striped w3-border">'+out+'</table>'
     document.getElementById("description_db").innerHTML = out;
 }
-
 
 
 <!-- ***  get Forecast Eolic  ***-->
@@ -49,27 +56,24 @@ function disp_forecast_eo(arr) {
     var 
     out = "";
     var i;
-    for(i = 0; i < arr.chats.length; i++) {
-        out += '<option value="' + arr.chats[i]['chat'] + '">' +
-        arr.chats[i]['chat'] + '</option>';
+    for(i = 0; i < arr.r2.length; i++) {
+         out += '<tr> <td>' + arr.r2[i]['name'] + '</td><td>' +
+            arr.r2[i]['f_data'] +
+            '</td><td>'+arr.r2[i]['l_data']+'</td></tr>';
     }
-	out='<select id="id_chat">'+out+'</select>'
-    document.getElementById("g_eo_div").innerHTML = out;
+	out='<table>'+out+'</table>'
+   document.getElementById("g_eo_div").innerHTML = out;
 }
 
 
-<!-- ***  get message script section and load buttons   *** -->
+<!-- ***  get forecast of wind   *** -->
 
-function carga_mensajes_chat(){
+function carga_forecast_wind(){
     conn="sentiment/"+document.getElementById("id_chat").value+'/';
     actualiza_sentiments_chat(conn);
     actualiza_imagen();
     conn= "message/"+document.getElementById("id_chat").value+'/';
     muestra_mensajes("chat",conn,"user");
-}
-function carga_mensajes_user(){
-    conn="message_u/"+document.getElementById("id_user").value+'/'
-    muestra_mensajes("user",conn,"chat")
 }
 
 function muestra_mensajes(tipo,conn,consulta){
@@ -100,67 +104,90 @@ function disp_message(arr,tipo,consulta) {
 </head>
 
 <body>
+<div class="w3-container w3-teal">
+<h1> API Energía Real </h1>
+</div>
+<div class="w3-container w3-leftbar w3-sand w3-serif">
+    <p><i>    Pronóstico de energía Renovable corto plazo - España </p></i>
+</div>
 
-<h1> API Energía Real : Pronóstico de energía Renovable corto plazo - España </h1>
+<div class="w3-container">
+    <div id="Proceso">
+        <img src="proceso_diagrama">
+    </div>
+</div>
 
-<h2>Pronóstico generación eólica</h2>
+<div class="w3-container">
+    <div class="w3-card-1 w3-sand">
+        <h3>Datos</h3>
+    </div>
+    
+    <div id="description_db"></div>
+    <br>
+    <button type="button" onclick="carga_desc_datos()">load</button>
+    <img src="datos_graph" id="tubo_datos" alt="Proceso de Pronóstico de generación" > 
+</div>
+
+
+<div class="w3-container">
+    <h4>cluster</h4>
+    <div id="mapid"></div>
+    <button type="button" onclick="consulta_estaciones()">load</button>
+</div>
+
+
+<div class="w3-container">
+<h3>Pronóstico generación eólica</h3>
 <button type="button" onclick="carga_gen_eo()">load</button>
 <img src="g_eo_graph" id="g_eo_sent" alt="Pronóstico generación eólica" > 
 <div id="g_eo_div"></div>
+</div>
 
+
+<div class="w3-container">
 <h3>Pronóstico generación fotovoltaica</h3>
 <button type="button" onclick="carga_gen_fv()">load</button>
 <img src="g_fv_graph" id="g_fv_sent" alt="Pronóstico generación fotovoltaica" > 
 <div id="g_fv_div"></div>
-
-<h3>Datos</h3>
-<div id="description_db"></div>
-<button type="button" onclick="carga_desc_datos()">load</button>
-<img src="datos_graph" id="tubo_datos" alt="Proceso de Pronóstico de generación" > 
+</div>
 
 
-<h3>Proceso de Pronóstico</h3>
-<div id="Proceso"></div>
 
 </body>
 
 <script>
-function carga_sentimientos() {
-	    var image = document.getElementById("sentiment_sent");
-	    image.src = image.src.split("?")[0] + "?" + new Date().getTime();
-    }
 
-function esconde_mensajes() {
-        var x = document.getElementById("messages");
-        if (x.style.display === "none") {
-            x.style.display = "block";
-        } else {
-            x.style.display = "none";
+var mymap = L.map('mapid').setView([35,-7], 4);
+    
+L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1
+}).addTo(mymap);
+
+
+function consulta_estaciones(){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var myArr = JSON.parse(this.responseText);
+            muestra_estaciones(myArr);
         }
-    }
-
-function actualiza_imagen() {
-	    var image = document.getElementById("chat_sent");
-	    image.src = image.src.split("?")[0] + "?" + new Date().getTime();
-    }
-
-function actualiza_sentiments_chat(conn){
-	var xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			var myArr = JSON.parse(this.responseText);
-			disp_sentiment(myArr);
-			}
-		};
-	xhttp.open("GET", conn, true);
-	xhttp.send();
+    };
+    xhttp.open("GET",'estaciones/' , true);
+    xhttp.send();
 }
 
-function disp_sentiment(myArr){
-	var out = " The mean values in the chat "+myArr['chat']+" are: <br>";
-	out+= " Neg: "+myArr['Neg']+"   --   Pos: " +myArr['Pos'] +"<br>";
-	out+= " Neu: "+ myArr['neu']+"   --   Compound: "+ myArr['compound'];
-    	document.getElementById("chat_titulo").innerHTML = out;
+function muestra_estaciones(myArr){
+   for(let i = 0; i < myArr.estaciones.length; i++) {
+       marker = new
+    L.marker([myArr.estaciones[i]["lat"],myArr.estaciones[i]["lon"]]).addTo(mymap);
+   }
 }
+
 </script>
 </html> 

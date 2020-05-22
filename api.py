@@ -1,5 +1,7 @@
+# Modules basic for the API
 from src.config import PORT
 from src.app import app
+import src.schedule
 
 # Modules ad-hoc from e-real
 import src.config
@@ -18,4 +20,5 @@ from src.get_data import describ_db
 import src.routes.home
 import src.routes.descrip
 import src.routes.forecast
+
 app.run("0.0.0.0", PORT, debug=True)

@@ -1,5 +1,5 @@
 import time
-import atexita
+import atexit
 
 # Modules ad-hoc from e-real
 import src.config
@@ -21,7 +21,7 @@ def update_data_from_esios_aemet():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=update_data_from, trigger="interval", seconds=3600)
+scheduler.add_job(func=update_data_from_esios_aemet, trigger="interval", seconds=3600)
 scheduler.start()
 
 # Shut down the scheduler when exiting the app
