@@ -121,37 +121,42 @@ function disp_message(arr,tipo,consulta) {
     <div class="w3-card-1 w3-sand">
         <h3>Datos</h3>
     </div>
-    
+   
+    <button type="button" onclick="carga_desc_datos()">load</button>
     <div id="description_db"></div>
     <br>
-    <button type="button" onclick="carga_desc_datos()">load</button>
     <img src="datos_graph" id="tubo_datos" alt="Proceso de Pronóstico de generación" > 
 </div>
 
 
 <div class="w3-container">
-    <h4>cluster</h4>
-    <div id="mapid"></div>
-    <button type="button" onclick="consulta_estaciones()">load</button>
+    <div class="w3-card-1 w3-sand">
+        <h4>Cluster</h4>
+    </div>
+
+<!--    <div id="mapid"></div>
+<button type="button" onclick="consulta_estaciones()">load</button>-->
+
 </div>
 
 
 <div class="w3-container">
-<h3>Pronóstico generación eólica</h3>
-<button type="button" onclick="carga_gen_eo()">load</button>
-<img src="g_eo_graph" id="g_eo_sent" alt="Pronóstico generación eólica" > 
-<div id="g_eo_div"></div>
+    <div class="w3-card-1 w3-sand">
+        <h3>Pronóstico generación eólica</h3>
+    </div>
+    <button type="button" onclick="carga_gen_eo()">load</button>
+    <img src="g_eo_graph" id="g_eo_sent" alt="Pronóstico generación eólica" > 
+    <div id="g_eo_div"></div>
 </div>
-
 
 <div class="w3-container">
-<h3>Pronóstico generación fotovoltaica</h3>
-<button type="button" onclick="carga_gen_fv()">load</button>
-<img src="g_fv_graph" id="g_fv_sent" alt="Pronóstico generación fotovoltaica" > 
-<div id="g_fv_div"></div>
+     <div class="w3-card-1 w3-sand">
+         <h3>Pronóstico generación fotovoltaica</h3>
+     </div>
+     <button type="button" onclick="carga_gen_fv()">load</button>
+     <img src="g_fv_graph" id="g_fv_sent" alt="Pronóstico generación fotovoltaica" > 
+     <div id="g_fv_div"></div>
 </div>
-
-
 
 </body>
 

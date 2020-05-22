@@ -75,9 +75,16 @@ def make_winds():
 
     #Asigna cluster a las medidas de los últimas lecturas
     df_clima_est=df_estaciones.loc[df_estaciones['indicativo'].isin(list(clima_velmedia.columns))]
-    plt.scatter(df_clima_est['lon'],df_clima_est['lat'],c=df_clima_est['cluster'])
+    df=df_clima_est
+    df['lat']=df['lat'].div(10000)
+    df['lon']=df['lon'].div(10000)
+    gdf = geopandas.GeoDataFrame(
+            df, geometry=geopandas.points_from_xy(df.lon, df.lat),crs="EPSG:4326")
+    df = gdf.to_crs(epsg=3857)
+    ax = df.plot(figsize=(10, 10), alpha=0.5, edgecolor='k')
+    ctx.add_basemap(ax)
     plt.savefig('src/templates/mapa_estaciones_lec.png')
-    return True
+
     r2_vec=[]
     df_clima_est=df_clima_est.set_index('indicativo')
     for cluster in clusters:
@@ -102,5 +109,6 @@ def make_winds():
             cv_x_pred=cv_x_pred.rename(cv_x.columns[0])
             cv_x_pred.to_csv('data/pred_wind_'+str(cluster)+'.csv')
 
-
+    # Save in Monogodb
+    print('+++ mean MSE:',sum(r2_vec)/float(len(r2_vec)))
     return r2_vec

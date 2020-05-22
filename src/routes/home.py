@@ -14,12 +14,12 @@ def style_present():
 def get_image_proceso():
     return send_file('templates/proceso.png', mimetype='image/png')
 
-@app.route("/m_estaciones")
-def get_image_route():
+@app.route("/datos_graph")
+def get_image_estaciones():
     return send_file('templates/mapa_estaciones.png', mimetype='image/png')
 
 
-@app.route("/m_estaciones_lec")
-def get_image_all_sentiments():
+@app.route("/cluster_graph")
+def get_image_cluster():
     return send_file('templates/mapa_estaciones_lec.png', mimetype='image/png')
 

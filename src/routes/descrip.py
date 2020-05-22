@@ -1,5 +1,7 @@
 from src.app import app
+from src.connect_db import client_influx
 from src.connect_db import client_mongo
+from src.connect_db import client_df
 from src.get_data import describ_db
 from src.model import cluster
 from bson.json_util import dumps
@@ -25,6 +27,21 @@ def estationes():
     estaciones='{"estaciones":'+dumps(estaciones)+'}'
     estaciones_j=json.loads(estaciones)
     return estaciones_j
+
+@app.route("/lectura_aemet/")
+def lectura_aemet():
+    df=client_df
+    q_str=''' SELECT * FROM "Clima"  WHERE time > now()-3d'''
+    res=df.query(q_str)
+    points=res.items()
+    points=list(points)
+    clima=points[0][1]
+    col_velmedia=[ele for ele in clima.columns if ele.split('-')[0]=='velmedia']
+    clima_velmedia=clima[[*col_velmedia]]
+    clima_velmedia.shape
+    
+    return estaciones_j
+
 
 
 
