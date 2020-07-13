@@ -1,5 +1,6 @@
 # Archivo que contiene la función que lee los indicadores de REE Esios y
 # escribe en mongo DB los mismo para su gestión.
+
 import src.connect_db
 import requests
 from src.connect_db import client_influx

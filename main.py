@@ -90,8 +90,8 @@ def main():
 
     if args.get_data_esios:
 #        c_esios.c_esios()
-        t_esios.lee_esios_carga_influx(551) # <- lee eolica generada en timpo real
-        t_esios.lee_esios_carga_influx(1295) # <- lee solar generada en timpo real
+        t_esios.lee_esios_carga_influx(551) # <- lee eolica generada en tiempo real
+        t_esios.lee_esios_carga_influx(1295) # <- lee solar generada en tiempo real
 
 
     if args.get_data_aemet:

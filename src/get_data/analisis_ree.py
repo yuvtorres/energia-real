@@ -1,4 +1,4 @@
-# Archivo para leer de Red Eléctrica de la API que no necesiota clave. 
+# Archivo para leer de Red Eléctrica de la API que no necesita clave. 
 # La función widget_caract sirve para consultar todos lo endpoints y 
 # caracaterizarlos según el parámetro de tiempo (hora, día o mes) de la consulta.
 from src.connect_db import client_mongo
