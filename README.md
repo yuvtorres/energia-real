@@ -1,6 +1,6 @@
 # energia-real
 
-__API para ver análisis y pronóstico de la generación de energía en España__
+__API para análisis y pronóstico de la generación de energía en España__
 
 ---
 
@@ -8,11 +8,11 @@ __API para ver análisis y pronóstico de la generación de energía en España_
 
 Esta aplicación se estructura en tres partes principales:
 
-- Gestión de datos
+- Gestión de datos: bases de datos y herramientas de gestión (ETL).
 
-- Análisis de los datos y predicción  
+- Análisis de los datos y predicción: API para realizar el análisis de datos y el pronóstico.
 
-- Visualización de datos
+- Visualización de datos y resultados: interfaz WEB de visualización.
 
 ## Gestión de datos
 
@@ -25,8 +25,9 @@ Las bases de datos que se tendrán son:
 
 - Influx: para datos temporales reales, como medidas de generación o precios ofertados.
 
-- MySQL: para los datos de pronóstico.
+- MySQL: para los datos de pronóstico, o datos estructurados.
 
+- MongoDB: para los demás datos.
 
 Adicionalmente otro tipo de datos como: lista de municipios, lista de estaciones meteriologicas, etc. Se almacenan en una base de datos de mongodb.
 
