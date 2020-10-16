@@ -1,6 +1,6 @@
 # energia-real
 
-__API para análisis y pronóstico de la generación de energía en España__
+__Plataforma para análisis y pronóstico de la generación de energía en España__
 
 ---
 
@@ -29,16 +29,13 @@ Las bases de datos que se tendrán son:
 
 - MongoDB: para los demás datos.
 
-Adicionalmente otro tipo de datos como: lista de municipios, lista de estaciones meteriologicas, etc. Se almacenan en una base de datos de mongodb.
+## Análisis de datos y predicción
 
-## Análisis de datos
+Esta API realiza el análisis de los datos y la predicción a partir de la información dada por el módulo anterior. 
+Así mismo los parámetros de los modelos de predicción son ajustados automáticamente cada cierto tiempo incluyendo la nueva información.
 
-La aplicación tendrá una interfaz de terminal para manejar las bases de datos, importar medidas y hacer análisis gruesos del contenito de las bases de datos.
+## Visualialización
 
-Adicionalmente como interfaz se tiene una web que interactúa con la API-WEB, cuyos endpoints tendrán el pronóstico de consumo de las próximas 24 horas de generación renovables (eólica y fotovoltáica).
+La visualización se hace a través de una WEB que conecta a la API de análisis de datos para extraer los resultados.
 
-## Visualización
 
-El gestor es un programa de terminal que importa los datos desde REE y AEMET, y permite ver un resumen general de estos.
-
-## El Pronóstico
