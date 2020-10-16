@@ -1,6 +1,6 @@
 # Programa para gestionar la bd de energia en tiempo real
 
-# Modules efrom python
+# Modules from python
 import argparse
 import sys
 
@@ -18,6 +18,7 @@ from src.get_data import carga_aemet_base as c_aemet_base
 from src.get_data import describ_db
 
 def main():
+    # Getting the description thats it's showed when the option --help is called
     file1 = open("src/main_description.txt","r")
     description_text = '\n'.join( file1.readlines() )
     file1.close()
