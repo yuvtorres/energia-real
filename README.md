@@ -1,6 +1,6 @@
 # energia-real
 
-''API para ver análisis y pronóstico de la generación de energía en España''
+__API para ver análisis y pronóstico de la generación de energía en España__
 
 ---
 
@@ -23,9 +23,10 @@ La gestión de datos se realiza a través de un programa de línea de comandos q
 
 Las bases de datos que se tendrán son:
 
-- Influx: para datos temporales reales, como medidas de .
+- Influx: para datos temporales reales, como medidas de generación o precios ofertados.
 
-- MySQL Por tratarse de datos temporales, se manejarán en Influx, una base de datos orientada a las series temporales.
+- MySQL: para los datos de pronóstico.
+
 
 Adicionalmente otro tipo de datos como: lista de municipios, lista de estaciones meteriologicas, etc. Se almacenan en una base de datos de mongodb.
 
