@@ -26,8 +26,8 @@ def main():
 
     # optional for read REE public API
     parser.add_argument('--get_data_ree', action='store_true',
-                help='''Read data from public api REE
-                (https://apidatos.ree.es), used for initializated the db''')
+                help='''Read data from public api REE (https://apidatos.ree.es), 
+                        asking for import period ''')
 
     # optional for read REE public API and write in Inlfux db some parameters
     parser.add_argument('--get_data_ree2', action='store_true',
@@ -81,7 +81,7 @@ def main():
 
     args = parser.parse_args()
 
-    # initialized the db 
+    # Try to read from open API of REE and write in InfluxDB 
     if args.get_data_ree:
         c_ix.main()
 

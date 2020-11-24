@@ -1,4 +1,4 @@
-# archivo para leer de Red Eléctrica
+# archivo para leer de Red Eléctrica de la consulta que no requere de clave 
 import requests
 import json
 import datetime as dt
