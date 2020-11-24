@@ -18,10 +18,12 @@ def carga_indicadores():
 
     datos=res.json()
     db=client_mongo.ereal_collections
-    print()
-    print('*** Fueron cargados ',len(datos['indicators']) , ' indicadores en mongo DB ')
+    if "indicadores_ree" in db.list_collection_names():
+        db.indicadores_ree.drop()
     db.indicadores_ree.insert_many(datos['indicators'])
-    
+    print('*** Fueron cargados ',len(datos['indicators']) , ' indicadores en mongo DB ')
+
+
 def lee_esios_carga_influx(id):
     # funcion para la lectura en tiempo real de la generación eólica (id=551) últimas
     # tres horas D-1 hasta la hora actual
@@ -34,7 +36,7 @@ def lee_esios_carga_influx(id):
             'Content-Type': 'application/json',
             'Host': 'api.esios.ree.es',
             'Authorization': f'Token token={REE_KEY}'}
-    
+
     parm={'start_date':data_ini.strftime("%Y-%m-%dT%H:%M%SZ"),
             'end_date':data_fin.strftime("%Y-%m-%dT%H:%M%SZ")}
 
@@ -42,7 +44,7 @@ def lee_esios_carga_influx(id):
     print(res,parm)
     name=res.json()['indicator']['name']
     values=res.json()['indicator']['values']
-    print('writing in influx...',data_ini )
+    print('writing in influx from ',data_ini )
     escribe_influx(name, values)
 
 

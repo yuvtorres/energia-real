@@ -94,10 +94,10 @@ def c_aemet_actual(actualiza_meta=False):
 
     if actualiza_meta:
         c_aemet_actual_mongo_metadatos(url_meta)
-    
+
     k=0
     variables=['fint','idema','vv','vmax','inso','vvu','vmaxu']
-    print('actualizando ',len(response.json()),' estaciones')
+    print('updating from ',len(response.json()),' meteorological stations')
     for lectura in response.json():
         if sum([var in lectura.keys() for var in variables ])>=5:
             data=lectura['fint']
@@ -128,7 +128,7 @@ def c_aemet_actual(actualiza_meta=False):
                 print(json_body)
                 return False
 
-    print('se escribieron ',k,' lecturas completas')
+    print('It was written ',k,' complete measures from AEMET (weather agency)')
 
 
 

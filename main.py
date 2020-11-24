@@ -24,22 +24,22 @@ def main():
     file1.close()
     parser = argparse.ArgumentParser(description=description_text)
 
-    # optional for read REE public API
-    parser.add_argument('--get_data_ree', action='store_true',
+    # read demand data from REE public API
+    parser.add_argument('--get_demand_data_ree', action='store_true',
                 help='''Read data from public api REE (https://apidatos.ree.es), 
-                        asking for import period ''')
+                        asking for import period''')
 
-    # optional for read REE public API and write in Inlfux db some parameters
-    parser.add_argument('--get_data_ree2', action='store_true',
-                help='''Read data from public api REE
-                (https://apidatos.ree.es), some parameters used for initializated the db''')
-
+    # Read all parameters from REE API with privat key and write in mongoDB on 
+    # the collection indicadores_ree
+    parser.add_argument('--get_indicators_ree', action='store_true',
+                help='''Read indicators from system ESIOS of REE (https://www.esios.ree.es/es) 
+                and write them in Mongodb''')
 
     # optional for reading REE API Esios
     parser.add_argument('--get_data_esios', action='store_true',
                 help='''Read the data from API ESIOS - REE, which is the platform
                 that contains the main information of the Spanish
-                electricity wholesale market''')
+                electricity wholesale market, this function is called periodically''')
 
     # optional for reading AEMET API
     parser.add_argument('--get_data_aemet', action='store_true',
@@ -81,20 +81,20 @@ def main():
 
     args = parser.parse_args()
 
-    # Try to read from open API of REE and write in InfluxDB 
-    if args.get_data_ree:
+    # Try to read demadn data from open API of REE and write in InfluxDB 
+    if args.get_demand_data_ree:
         c_ix.main()
 
-    if args.get_data_ree2:
+    # Get the indicators of the data in the open API of REE
+    if args.get_indicators_ree:
         t_esios.carga_indicadores()
-#        a_ree.widget_caract()
 
+    # Get data of renewable generation from Esios, it is called periodically 
     if args.get_data_esios:
-#        c_esios.c_esios()
         t_esios.lee_esios_carga_influx(551) # <- lee eolica generada en tiempo real
         t_esios.lee_esios_carga_influx(1295) # <- lee solar generada en tiempo real
 
-
+    # Get data from AEMET in a period of time 
     if args.get_data_aemet:
         c_aemet.c_aemet()
 
