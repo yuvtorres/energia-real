@@ -26,10 +26,10 @@ def main():
 
     # read demand data from REE public API
     parser.add_argument('--get_demand_data_ree', action='store_true',
-                help='''Read data from public api REE (https://apidatos.ree.es), 
+                help='''Read demand data from public api REE (https://apidatos.ree.es), 
                         asking for import period''')
 
-    # Read all parameters from REE API with privat key and write in mongoDB on 
+    # Read all parameters from REE API with privat key and write them in mongoDB on 
     # the collection indicadores_ree
     parser.add_argument('--get_indicators_ree', action='store_true',
                 help='''Read indicators from system ESIOS of REE (https://www.esios.ree.es/es) 
@@ -48,9 +48,8 @@ def main():
                 for the renewable electricity generation in the short term''')
 
     # option for reading AEMET API to charge the stations 
-    parser.add_argument('--get_data_aemet_base', action='store_true',
-                help='''Read the data of the metereological stations from API AEMET,
-                and charge it in the mongo db: ereal_collections.''')
+    parser.add_argument('--get_data_stations_aemet', action='store_true',
+                help='''Read the data of the metereological stations from API AEMET                        , and charge it in the mongo db: ereal_collections''')
 
     # optional for reading AEMET API all stations at a time
     parser.add_argument('--get_actual_aemet', action='store_true',
@@ -59,7 +58,7 @@ def main():
                 for the renewable electricity generation in the short term''')
 
     # optional for reading AEMET API by station
-    parser.add_argument('--get_actual_aemet2', action='store_true',
+    parser.add_argument('--get_current_aemet', action='store_true',
                 help='''Read the last 24 hours data from API AEMET by stations''')
 
     # optional for make a sumary of the db
@@ -94,18 +93,20 @@ def main():
         t_esios.lee_esios_carga_influx(551) # <- lee eolica generada en tiempo real
         t_esios.lee_esios_carga_influx(1295) # <- lee solar generada en tiempo real
 
-    # Get data from AEMET in a period of time 
+    # Get data from AEMET in a period of time defined by user, the data are daily 
     if args.get_data_aemet:
         c_aemet.c_aemet()
 
-    if args.get_data_aemet_base:
+    # Get data of the weather stations and write it in MongoDB collection
+    if args.get_data_stations_aemet:
         c_aemet_base.c_aemet_estaciones()
 
+    # Get data of the last 24 hours from AEMET, if it is necessary to update
+    # the metadatos of mongo set true as argument 
     if args.get_actual_aemet:
-        # set true as argument to update the metadatos of mongodb
         c_aemet.c_aemet_actual()
 
-    if args.get_actual_aemet2:
+    if args.get_current_aemet:
         # set true as argument to update the metadatos of mongodb
         c_aemet2.c_aemet_por_estaciones()
 

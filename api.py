@@ -1,6 +1,8 @@
 # Modules basic for the API
 from src.config import PORT
 from src.app import app
+
+# Module of scheduling process 
 import src.schedule
 
 # Modules ad-hoc from e-real
@@ -16,7 +18,7 @@ from src.get_data import carga_aemet_actual2 as c_aemet2
 from src.get_data import carga_aemet_base as c_aemet_base
 from src.get_data import describ_db
 
-# import routes of app
+# Modules of the endpoints of app
 import src.routes.home
 import src.routes.descrip
 import src.routes.forecast

@@ -3,6 +3,7 @@ import requests
 from src.connect_db import client_mongo
 from src.connect_db import client_influx
 from src.config import AEMET_KEY
+from src.get_data.carga_influx import pregunta_fecha
 import datetime as dt
 
 def c_aemet():
@@ -12,8 +13,8 @@ def c_aemet():
 
     client_influx.switch_database('db_ereal')
     diff_time=dt.timedelta(days=15)
-    data_ini=dt.datetime(2020,5,1,0,0) # <---- parámetro configurable
-    data_fin=dt.datetime(2020,5,15,0,0) # <---- parámetro configurable
+    data_ini=dt.datetime(*pregunta_fecha("begins"),0,0) # <---- parámetro configurable
+    data_fin=dt.datetime(*pregunta_fecha("ends"),0,0) # <---- parámetro configurable
 
     while data_fin>data_ini:
         # Hace consultas cada 15 días 
