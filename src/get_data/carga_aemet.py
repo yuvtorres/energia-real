@@ -132,7 +132,6 @@ def c_aemet_actual(actualiza_meta=False):
     print('It was written ',k,' complete measures from AEMET (weather agency)')
 
 
-
 def c_aemet_actual_mongo_metadatos(url_metadatos):
     # actualiza la collection metadatos en mongodb
     querystring = { "api_key":AEMET_KEY }

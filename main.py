@@ -59,11 +59,12 @@ def main():
 
     # optional for reading AEMET API by station
     parser.add_argument('--get_current_aemet', action='store_true',
-                help='''Read the last 24 hours data from API AEMET by stations''')
+                help='''Similar to --get_actual_aemet but it makes the query to 
+                a different endpoint in API AEMET ( by weather station )''')
 
-    # optional for make a sumary of the db
+    # optional for make a summary of the db
     parser.add_argument('--describ_db', action='store_true',
-                help='''Describe the content of the influx db''')
+                help='''Summary of the content of the influx db''')
 
     # argument to create clusers 
     parser.add_argument('--create_cluster', action='store_true',
@@ -97,7 +98,7 @@ def main():
     if args.get_data_aemet:
         c_aemet.c_aemet()
 
-    # Get data of the weather stations and write it in MongoDB collection
+    # Get list of the weather stations with some metadata and write it in MongoDB collection
     if args.get_data_stations_aemet:
         c_aemet_base.c_aemet_estaciones()
 
@@ -106,10 +107,11 @@ def main():
     if args.get_actual_aemet:
         c_aemet.c_aemet_actual()
 
+    # Similar to get_actual_aemet, but it makes the query to other endpoint in AEMET% by weather station and shows all the process 
     if args.get_current_aemet:
-        # set true as argument to update the metadatos of mongodb
         c_aemet2.c_aemet_por_estaciones()
 
+    # Show a summary of the data in dbs
     if args.describ_db:
         describ_db.describ_db()
 
