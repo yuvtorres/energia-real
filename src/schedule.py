@@ -17,6 +17,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 def update_data_from_esios_aemet():
     t_esios.lee_esios_carga_influx(551)
     t_esios.lee_esios_carga_influx(1295)
+    t_esios.lee_esios_carga_influx(460)
     c_aemet.c_aemet_actual()
 
 
