@@ -38,4 +38,18 @@ Así mismo los parámetros de los modelos de predicción son ajustados automáti
 
 La visualización se hace a través de una WEB que conecta a la API de análisis de datos para extraer los resultados.
 
+### Instalación
 
+1. Requisitos: python3, mongod, Influx, mariadb
+2. Después de clonar (descargar), se deben instalar los módulos presentes en archivo requirements.txt 
+> pip3 install -r requirements.txt
+
+3. Crear el archivo .env en el directorio raiz, y definir las varibales de entorno:
+
+- PORT_MONGO: puerto del servidor MONGO 
+- PORT_INFLUX: puerto del servidor INFLUX
+- HOST_INFLUX: direccion del servidor INFLUX
+- HOST_MONGO: direccion del servidor MONGO
+- AEMET_KEY: Clave para acceder al servidor de AEMET (solicitarla)
+- REE_KEY: Clave para acceder al servidor de REE
+- PORT: Puerto donde se define el servicio
