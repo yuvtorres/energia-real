@@ -42,7 +42,8 @@ La visualización se hace a través de una WEB que conecta a la API de análisis
 
 1. Requisitos: python3, mongod, Influx, mariadb
 2. Después de clonar (descargar), se deben instalar los módulos presentes en archivo requirements.txt 
-> pip3 install -r requirements.txt
+
+	pip3 install -r requirements.txt
 
 3. Crear el archivo .env en el directorio raiz, y definir las varibales de entorno:
 
