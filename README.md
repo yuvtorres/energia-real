@@ -34,7 +34,7 @@ Las bases de datos que se tendrán son:
 Esta API realiza el análisis de los datos y la predicción a partir de la información dada por el módulo anterior. 
 Así mismo los parámetros de los modelos de predicción son ajustados automáticamente cada cierto tiempo incluyendo la nueva información.
 
-## Visualiización
+## Visualización
 
 La visualización se hace a través de una WEB que conecta a la API de análisis de datos para extraer los resultados.
 
@@ -53,4 +53,4 @@ La visualización se hace a través de una WEB que conecta a la API de análisis
 - HOST_MONGO: direccion del servidor MONGO
 - AEMET_KEY: Clave para acceder al servidor de AEMET (solicitarla)
 - REE_KEY: Clave para acceder al servidor de REE
-- PORT: Puerto donde se define el servicio
+- PORT: Puerto donde se define el servicio de e-real

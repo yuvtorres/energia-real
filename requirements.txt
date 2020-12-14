@@ -12,4 +12,8 @@ apscheduler
 geopandas
 pandas
 python-dotenv
-os-sys
+scikit-learn
+matplotlib
+statsmodels
+seaborn
+contextily

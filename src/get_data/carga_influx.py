@@ -35,9 +35,8 @@ def main():
     client_influx.close()
 
 def escribe_influx(table,values):
-    # write in influx the data, table is string with the name of
-    # the data, values are a dictionary wtih datetime, value an 
-    # percentage 
+    # escribe en influx, la tabla es una cadena de caracteres con el nombre de los datos 
+    # los valores son diccionarios con fechas/hora y valores en porcentaje
 
     dbs=client_influx.get_list_database()
     dbs_list=[]
