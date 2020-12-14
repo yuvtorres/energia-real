@@ -1,0 +1,1 @@
+This program setup the initial operation of e-real and is useful to manage the differents BD, and supervise the forecast process. 
