@@ -2,7 +2,6 @@
 from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
 from src.connect_db import client_influx
-from src.connect_db import client_df
 from src.connect_db import client_mongo
 
 # libraries from python 
@@ -19,9 +18,8 @@ def make_gen_eo():
     # neuronales. También crea la gráfica de estaciónes
 
     # carga datos de generación históticos recientes
-    df=client_df
     q_str=''' SELECT * FROM "Generación T.Real eólica"  WHERE time > now()-3d'''
-    res=df.query(q_str)
+    res=client_influx.query_api().query(q_str,org='ereal')
 
     points=res.items()
     points=list(points)
@@ -30,7 +28,7 @@ def make_gen_eo():
 
     # carga datos de viento medio
     q_str=''' SELECT * FROM "Clima"  WHERE time > now()-3d'''
-    res=df.query(q_str)
+    res=client_influx.query_api().query(q_str,org='ereal')
 
     points=res.items()
     points=list(points)

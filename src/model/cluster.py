@@ -2,7 +2,6 @@
 from statsmodels.tsa.api import SARIMAX
 from sklearn.cluster import KMeans
 from src.connect_db import client_influx
-from src.connect_db import client_df
 from src.connect_db import client_mongo
 
 # libraries from python 
@@ -59,9 +58,8 @@ def make_winds():
     clusters=list(df_estaciones.cluster.value_counts().index)
 
     # lee las medidas de Influx y las pone como dataframe
-    df=client_df
     q_str=''' SELECT * FROM "Clima"  WHERE time > now()-3d'''
-    res=df.query(q_str)
+    res=client_influx.query_api().query(q_str,org=ereal)
     points=res.items()
     points=list(points)
     clima=points[0][1]

@@ -48,9 +48,11 @@ La visualización se hace a través de una WEB que conecta a la API de análisis
 3. Crear el archivo .env en el directorio raiz, y definir las varibales de entorno:
 
 - PORT_MONGO: puerto del servidor MONGO 
+- HOST_MONGO: direccion del servidor MONGO
 - PORT_INFLUX: puerto del servidor INFLUX
 - HOST_INFLUX: direccion del servidor INFLUX
-- HOST_MONGO: direccion del servidor MONGO
+- USER_INFLUX: Usuario para interactuar con Influx
+- PASSWORD_INFLUX: Clave del usuario
 - AEMET_KEY: Clave para acceder al servidor de AEMET (solicitarla)
 - REE_KEY: Clave para acceder al servidor de REE
 - PORT: Puerto donde se define el servicio de e-real

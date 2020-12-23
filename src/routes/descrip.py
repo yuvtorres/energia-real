@@ -1,7 +1,6 @@
 from src.app import app
 from src.connect_db import client_influx
 from src.connect_db import client_mongo
-from src.connect_db import client_df
 from src.get_data import describ_db
 from src.model import cluster
 from bson.json_util import dumps
@@ -30,9 +29,8 @@ def estationes():
 
 @app.route("/lectura_aemet/")
 def lectura_aemet():
-    df=client_df
     q_str=''' SELECT * FROM "Clima"  WHERE time > now()-3d'''
-    res=df.query(q_str)
+    res=client_influx.query_api().query(q_str,'ereal')
     points=res.items()
     points=list(points)
     clima=points[0][1]
