@@ -1,4 +1,4 @@
-from influxdb_client import InfluxDBClient
+from influxdb_client import InfluxDBClient, Point
 from pymongo import MongoClient
 from src.config import PORT_INFLUX
 from src.config import HOST_INFLUX
@@ -12,4 +12,4 @@ import src.config
 import os
 
 client_influx =InfluxDBClient(url='http://'+str(HOST_INFLUX)+':'+str(PORT_INFLUX),token=TOKEN_INFLUX)
-client_mongo = MongoClient(HOST_MONGO,PORT_MONGO)
+:client_mongo = MongoClient(HOST_MONGO,PORT_MONGO)

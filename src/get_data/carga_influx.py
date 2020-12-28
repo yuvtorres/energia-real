@@ -37,7 +37,11 @@ def main():
 def escribe_influx(table,values):
     # escribe en influx, la tabla es una cadena de caracteres con el nombre de los datos 
     # los valores son diccionarios con fechas/hora y valores en porcentaje
-
+    
+    write_api = client.write_api(write_options=SYNCHRONOUS)
+    data = "mem,host=host1 used_percent=23.43234543"
+    write_api.write(bucket, org, data)
+    
     dbs=client_influx.get_list_database()
     dbs_list=[]
     if not isinstance(dbs,list):
@@ -50,15 +54,8 @@ def escribe_influx(table,values):
     client_influx.switch_database('db_ereal')
 
     for value in values:
-        json_body=[{
-            "measurement":table,
-            "time":value['datetime'],
-            "fields":{
-                "value":value['value'],
-                "percentage":value['percentage']
-                }
-            }
-            ]
+        P=Point("")
+        write_api(buket="ereal", record=P)
         client_influx.write_points(json_body)
 
 def pregunta_fecha(pregunta):
