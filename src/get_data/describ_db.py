@@ -1,15 +1,18 @@
+# Module with the basic analisys from the database.
+
 import src.config
 import src.connect_db as conn
 
 def describ_db():
-    dbs = conn.client_influx.get_list_database()
+    query_api = conn.client_influx.query_api()
     c_mongo = conn.client_mongo
     db=c_mongo.ereal_collections
 
 
     print('*** Influx db description ***')
     print('***  the dbs are:')
-    [ print(val['name']) for val in dbs if val['name']!='_internal' ]
+    print(f'the value of db is: {db}, and the type is: {type(db)}')
+    [ print(val['name']) for val in db if val['name']!='_internal' ]
     print('                ***')
     
     conn.client_influx.switch_database('db_ereal')

@@ -1,14 +1,17 @@
-# Modules basic for the API
+# Basics modules for the API
 from src.config import PORT
 from src.app import app
 
 # Module of scheduling process 
 import src.schedule
 
-# Modules ad-hoc from e-real
+####  Modules ad-hoc e-real ####
+
 import src.config
+
 from src.model import pronostico
 from src.model  import cluster
+
 from src.get_data import tool_esios as t_esios
 from src.get_data import analisis_ree as a_ree
 from src.get_data import carga_influx as c_ix
