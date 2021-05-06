@@ -53,6 +53,7 @@ La visualización se hace a través de una WEB que conecta a la API de análisis
 - HOST_INFLUX: direccion del servidor INFLUX
 - USER_INFLUX: Usuario para interactuar con Influx
 - PASSWORD_INFLUX: Clave del usuario
+- TOKEN_INFLUX: Token generado por el administrador de influx
 - AEMET_KEY: Clave para acceder al servidor de AEMET (solicitarla)
 - REE_KEY: Clave para acceder al servidor de REE
 - PORT: Puerto donde se define el servicio de e-real
