@@ -1,6 +1,5 @@
 # Byte-compiled / optimized / DLL files
 *.swo
-*.ipynb
 __pycache__/
 *.py[cod]
 *$py.class
