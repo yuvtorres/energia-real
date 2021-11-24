@@ -34,7 +34,7 @@ Las bases de datos que se tendrán son:
 Esta API realiza el análisis de los datos y la predicción a partir de la información dada por el módulo anterior. 
 Así mismo los parámetros de los modelos de predicción son ajustados automáticamente cada cierto tiempo incluyendo la nueva información.
 
-## Visualialización
+## Visualización
 
 La visualización se hace a través de una WEB que conecta a la API de análisis de datos para extraer los resultados.
 
